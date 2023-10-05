@@ -1,4 +1,12 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  images: {
+    domains: [
+      "localhost",
+      "lh3.googleusercontent.com",
+      "firebasestorage.googleapis.com",
+    ],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
