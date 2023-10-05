@@ -19,7 +19,9 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className="overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-300 scrollbar-thumb-rounded-full">
+        {children}
+      </body>
     </html>
   );
 }

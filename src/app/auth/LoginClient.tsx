@@ -1,9 +1,17 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import bcrypt from "bcryptjs";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { firestore } from "@/firebase";
+import { collection, getDocs } from "firebase/firestore";
+import useAdmin from "@/hooks/state-management/useAdmin";
+import toast, { Toaster } from "react-hot-toast";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 interface IFormInput {
   email: string;
@@ -13,13 +21,55 @@ interface IFormInput {
 interface ILoginClient {}
 
 const LoginClient: React.FC<ILoginClient> = ({}) => {
+  const [loading, setLoading] = useState(false);
+  const [authError, setAuthError] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInput>();
 
-  const submitHandler: SubmitHandler<IFormInput> = (data) => {};
+  const adminStore = useAdmin();
+  const router = useRouter();
+
+  const submitHandler: SubmitHandler<IFormInput> = (data) => {
+    setLoading(true);
+
+    const encryptedPassword = bcrypt.hashSync(
+      data.password,
+      "$2a$10$CwTycUXWue0Thq9StjUM0u"
+    );
+
+    getDocs(collection(firestore, "admins"))
+      .then((snapshot) => {
+        const _admin = snapshot.docs.find(
+          (_doc) => _doc.data().email == data.email
+        );
+
+        if (_admin) {
+          if (_admin.data().password == encryptedPassword) {
+            adminStore.setAdmin(
+              { id: _admin.id, email: _admin.data().email },
+              false
+            );
+            setAuthError("");
+            router.push("/");
+          } else {
+            toast.error("Invalid credentials");
+          }
+        } else {
+          toast.error("You are not registered as Admin.");
+        }
+
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   return (
     <div className="h-screen w-full flex flex-col justify-center items-center">
@@ -54,6 +104,7 @@ const LoginClient: React.FC<ILoginClient> = ({}) => {
               <Label htmlFor="name">Password :</Label>
               <Input
                 id="password"
+                type="password"
                 {...register("password", { required: true })}
               />
               {errors.password?.type == "required" && (
@@ -63,11 +114,12 @@ const LoginClient: React.FC<ILoginClient> = ({}) => {
               )}
             </div>
           </div>
-          <Button type="submit" className="w-full">
-            Login
+          <Button disabled={loading} type="submit" className="w-full">
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Login"}
           </Button>
         </form>
       </div>
+      <Toaster />
     </div>
   );
 };

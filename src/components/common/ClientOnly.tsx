@@ -15,7 +15,7 @@ const ClientOnly: React.FC<IClientOnly> = ({ children }) => {
 
   if (!hasMounted) return null;
 
-  return <>{children}</>;
+  return children;
 };
 
 export default ClientOnly;
