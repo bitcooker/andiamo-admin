@@ -226,9 +226,7 @@ const FeedsClient: React.FC<IFeedsClient> = ({}) => {
                     <div className="mt-2 w-full">
                       {trips ? (
                         <Select>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Theme" />
-                          </SelectTrigger>
+                          <SelectTrigger className="w-full"></SelectTrigger>
                           <SelectContent>
                             {trips.map((_trip, index) => (
                               <SelectItem
