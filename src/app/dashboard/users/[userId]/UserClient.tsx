@@ -34,9 +34,7 @@ const UserClient: React.FC<IUsersClient> = ({ userId }) => {
           {user ? (
             <Image
               src={
-                user.photoURL == ""
-                  ? "/images/image_placeholder.png"
-                  : user.photoURL
+                user.photoURL == "" ? "/images/user_avatar.jpg" : user.photoURL
               }
               alt="User Photo"
               width={96}

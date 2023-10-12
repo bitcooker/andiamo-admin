@@ -10,10 +10,10 @@ import { AiOutlineClose } from "react-icons/ai";
 
 interface IFeedCard {
   tripId: string;
-  onClick: () => void;
+  onRemove: () => void;
 }
 
-const FeedCard: React.FC<IFeedCard> = ({ tripId, onClick }) => {
+const FeedCard: React.FC<IFeedCard> = ({ tripId, onRemove }) => {
   const [trip, setTrip] = useState<TripType | null>(null);
 
   const tripDocUnsub = onSnapshot(
@@ -33,15 +33,12 @@ const FeedCard: React.FC<IFeedCard> = ({ tripId, onClick }) => {
   const router = useRouter();
 
   const handleRemoveClicked = () => {
-    onClick();
+    onRemove();
   };
 
   return (
-    <div
-      onClick={handleCardClicked}
-      className="relative flex items-center w-full cursor-pointer bg-white"
-    >
-      <div className="">
+    <div className="relative flex items-center w-full cursor-pointer bg-white">
+      <div className="" onClick={handleCardClicked}>
         {trip ? (
           <Image
             alt="Trip Photo"

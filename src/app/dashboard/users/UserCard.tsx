@@ -22,10 +22,10 @@ const UserCard: React.FC<IUserCard> = ({ user }) => {
     >
       <Image
         alt="User Photo"
-        src={user.photoURL}
+        src={user.photoURL == "" ? "/images/user_avatar.jpg" : user.photoURL}
         width={96}
         height={96}
-        className="w-[96px] h-[96px] aspect-square object-cover rounded-lg"
+        className="w-[96px] h-[96px] aspect-square object-cover rounded-lg mx-auto"
       />
       <div className="text-sm text-center mt-2">{user.name}</div>
     </div>

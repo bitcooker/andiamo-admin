@@ -53,7 +53,7 @@ const TripsPage: React.FC<ITripsPage> = ({ userId }) => {
   const [deleting, setDeleting] = useState(false);
   const [tripPlans, setTripPlans] = useState<TripPlanType[] | null>(null);
   const [addStatus, setAddStatus] = useState("planning");
-  const [addTrip, setAddTrip] = useState<TripType | null>(null);
+  const [addTripId, setAddTripId] = useState<String | null>(null);
   const [deleteTripPlan, setDeleteTripPlan] = useState<TripPlanType | null>(
     null
   );
@@ -156,10 +156,6 @@ const TripsPage: React.FC<ITripsPage> = ({ userId }) => {
     setAddStatus(_status);
   };
 
-  const handleAddTripChanged = (e: TripType) => {
-    setAddTrip(e);
-  };
-
   const handleAddTripPlan = () => {
     setAdding(true);
     addTripPlan()
@@ -171,16 +167,21 @@ const TripsPage: React.FC<ITripsPage> = ({ userId }) => {
       .finally(() => {
         setAdding(false);
         setShowAddModal(false);
+        setAddTripId(null);
       });
   };
 
   const addTripPlan = async () => {
-    if (addTrip) {
-      await addDoc(collection(firestore, "users", userId, "tripPlans"), {
-        status: addStatus,
-        tripTitle: addTrip.title,
-        tripId: addTrip.id,
-      });
+    if (addTripId && trips) {
+      const addTrip = trips.find((_trip) => _trip.id == addTripId);
+
+      if (addTrip) {
+        await addDoc(collection(firestore, "users", userId, "tripPlans"), {
+          status: addStatus,
+          tripTitle: addTrip.title,
+          tripId: addTrip.id,
+        });
+      }
     }
   };
 
@@ -195,6 +196,7 @@ const TripsPage: React.FC<ITripsPage> = ({ userId }) => {
       .finally(() => {
         setDeleting(false);
         setShowDeleteModal(false);
+        setAddTripId(null);
       });
   };
 
@@ -285,17 +287,13 @@ const TripsPage: React.FC<ITripsPage> = ({ userId }) => {
                   <span className="mr-5 w-[100px]">Trip</span>
                   <div className="mt-2 w-full">
                     {trips ? (
-                      <Select>
-                        <SelectTrigger className="w-full"></SelectTrigger>
+                      <Select onValueChange={(e) => setAddTripId(e)}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select a Trip" />
+                        </SelectTrigger>
                         <SelectContent>
                           {trips.map((_trip, index) => (
-                            <SelectItem
-                              value={_trip.title}
-                              key={index}
-                              onClick={() => {
-                                setAddTrip(_trip);
-                              }}
-                            >
+                            <SelectItem value={_trip.id} key={index}>
                               {_trip.title}
                             </SelectItem>
                           ))}

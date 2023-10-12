@@ -50,7 +50,7 @@ const FeedsClient: React.FC<IFeedsClient> = ({}) => {
   const [deleting, setDeleting] = useState(false);
   const [feeds, setFeeds] = useState<FeedType[] | null>(null);
   const [trips, setTrips] = useState<TripType[] | null>(null);
-  const [addTrip, setAddTrip] = useState<TripType | null>(null);
+  const [addTripId, setAddTripId] = useState<String | null>(null);
   const [feedToDelete, setFeedToDelete] = useState<FeedType | null>(null);
 
   const onDragEnd = (result: DropResult) => {
@@ -132,14 +132,15 @@ const FeedsClient: React.FC<IFeedsClient> = ({}) => {
       .finally(() => {
         setAdding(false);
         setShowAddModal(false);
+        setAddTripId(null);
       });
   };
 
   const addFeed = async () => {
-    if (addTrip) {
+    if (addTripId) {
       await addDoc(collection(firestore, "feeds"), {
         index: data[0].feeds.length - 1,
-        tripId: addTrip.id,
+        tripId: addTripId,
       });
     }
   };
@@ -155,6 +156,7 @@ const FeedsClient: React.FC<IFeedsClient> = ({}) => {
       .finally(() => {
         setDeleting(false);
         setShowDeleteModal(false);
+        setAddTripId(null);
       });
   };
 
@@ -197,7 +199,7 @@ const FeedsClient: React.FC<IFeedsClient> = ({}) => {
                             >
                               <FeedCard
                                 tripId={_feed.tripId}
-                                onClick={() => {
+                                onRemove={() => {
                                   setShowDeleteModal(true);
                                   setFeedToDelete(_feed);
                                 }}
@@ -225,17 +227,17 @@ const FeedsClient: React.FC<IFeedsClient> = ({}) => {
                     <span className="mr-5 w-[100px]">Trip</span>
                     <div className="mt-2 w-full">
                       {trips ? (
-                        <Select>
-                          <SelectTrigger className="w-full"></SelectTrigger>
+                        <Select
+                          onValueChange={(e) => {
+                            setAddTripId(e);
+                          }}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select a Trip" />
+                          </SelectTrigger>
                           <SelectContent>
                             {trips.map((_trip, index) => (
-                              <SelectItem
-                                value={_trip.title}
-                                key={index}
-                                onClick={() => {
-                                  setAddTrip(_trip);
-                                }}
-                              >
+                              <SelectItem value={_trip.id} key={index}>
                                 {_trip.title}
                               </SelectItem>
                             ))}
