@@ -54,6 +54,7 @@ const NeedToKnowPage: React.FC<INeedToKnowPage> = ({ trip }) => {
   const [currentNeedToKnow, setCurrentNeedToKnow] =
     useState<NeedToKnowType | null>(null);
   const [description, setDescription] = useState("");
+  const [title, setTitle] = useState("");
 
   useEffect(() => {
     const needToKnowsUnsub = onSnapshot(
@@ -75,8 +76,10 @@ const NeedToKnowPage: React.FC<INeedToKnowPage> = ({ trip }) => {
   useEffect(() => {
     if (currentNeedToKnow) {
       setDescription(currentNeedToKnow.description);
+      setTitle(currentNeedToKnow.title);
     } else {
       setDescription("");
+      setTitle("");
     }
   }, [currentNeedToKnow]);
 
@@ -104,11 +107,13 @@ const NeedToKnowPage: React.FC<INeedToKnowPage> = ({ trip }) => {
       await updateDoc(
         doc(firestore, "trips", trip.id, "needToKnows", currentNeedToKnow.id),
         {
+          title: title,
           description: description,
         }
       );
     } else {
       await addDoc(collection(firestore, "trips", trip.id, "needToKnows"), {
+        title: title,
         description: description,
         createdAt: serverTimestamp(),
       });
@@ -176,6 +181,16 @@ const NeedToKnowPage: React.FC<INeedToKnowPage> = ({ trip }) => {
             <DialogTitle>Edit description</DialogTitle>
             <DialogDescription>
               <div className="w-full mx-auto max-w-[300px] md:max-w-[400px]">
+                <div className="mt-5 flex flex-col items-start">
+                  <span className="mr-5 w-[100px]">Title</span>
+                  <Input
+                    className="max-w-[600px] mt-1"
+                    value={title}
+                    onChange={(e) => {
+                      setTitle(e.target.value);
+                    }}
+                  />
+                </div>
                 <div className="mt-5 flex flex-col items-start">
                   <span className="mr-5 w-[100px]">Description</span>
                   <Textarea

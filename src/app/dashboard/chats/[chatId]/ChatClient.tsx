@@ -50,8 +50,12 @@ const ChatClient: React.FC<IChatClient> = ({ chatId }) => {
   const [isSending, setIsSending] = useState(false);
   const [image, setImage] = useState("");
   const [title, setTitle] = useState("");
-  const [isUpdating, setIsUploading] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [imageFile, setImageFile] = useState<any>(undefined);
+
+  const [advisorName, setAdvisorName] = useState("");
+  const [advisorPhoto, setAdvisorPhoto] = useState("");
+  const [advisorPhotoFile, setAdvisorPhotoFile] = useState<any>(undefined);
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -98,6 +102,8 @@ const ChatClient: React.FC<IChatClient> = ({ chatId }) => {
     if (chat && isInit) {
       setImage(chat.image);
       setTitle(chat.title);
+      setAdvisorName(chat.advisorName);
+      setAdvisorPhoto(chat.advisorPhoto);
       setIsInit(false);
     }
   }, [chat]);
@@ -140,8 +146,18 @@ const ChatClient: React.FC<IChatClient> = ({ chatId }) => {
     }
   };
 
+  const handleAdvisorPhotoChanged = (value: any) => {
+    if (value) {
+      setAdvisorPhotoFile(value);
+      setAdvisorPhoto(URL.createObjectURL(value));
+    } else {
+      setAdvisorPhotoFile(null);
+      setAdvisorPhoto("");
+    }
+  };
+
   const handleUpdate = () => {
-    setIsUploading(true);
+    setIsUpdating(true);
     updateChatData()
       .then(() => {})
       .catch((err: any) => {
@@ -149,7 +165,7 @@ const ChatClient: React.FC<IChatClient> = ({ chatId }) => {
         console.error(err.message);
       })
       .finally(() => {
-        setIsUploading(false);
+        setIsUpdating(false);
       });
   };
 
@@ -169,6 +185,20 @@ const ChatClient: React.FC<IChatClient> = ({ chatId }) => {
       });
     }
 
+    if (
+      (chat!.advisorPhoto !== "" && advisorPhoto == "") ||
+      (chat!.advisorPhoto !== "" && advisorPhoto != chat!.advisorPhoto)
+    ) {
+      const deleteAdvisorPhotoRef = ref(storage, chat!.advisorPhoto);
+      await deleteObject(deleteAdvisorPhotoRef);
+
+      setAdvisorPhoto("");
+
+      await updateDoc(doc(firestore, "chats", chatId), {
+        advisorPhoto: "",
+      });
+    }
+
     if (imageFile) {
       // Image Upload
       const uploadRef = ref(storage, `/images/chats/${imageFile.name}`);
@@ -181,6 +211,20 @@ const ChatClient: React.FC<IChatClient> = ({ chatId }) => {
 
       setImage(url);
       setImageFile(null);
+    }
+
+    if (advisorPhotoFile) {
+      // Advisor Photo Upload
+      const uploadRef = ref(storage, `/images/chats/${advisorPhotoFile.name}`);
+
+      const snapshot = await uploadBytes(uploadRef, advisorPhotoFile);
+      const url = await getDownloadURL(snapshot.ref);
+      await updateDoc(doc(firestore, "chats", chatId), {
+        advisorPhoto: url,
+      });
+
+      setAdvisorPhoto(url);
+      setAdvisorPhotoFile(null);
     }
 
     // Title Update
@@ -213,6 +257,7 @@ const ChatClient: React.FC<IChatClient> = ({ chatId }) => {
                           key={index}
                           message={_message}
                           photoURL={user?.photoURL}
+                          advisorPhotoURL={chat.advisorPhoto}
                         />
                       ))}
                     </>
@@ -255,9 +300,9 @@ const ChatClient: React.FC<IChatClient> = ({ chatId }) => {
       <div className="col-span-2 lg:col-span-1 flex flex-col h-full justify-center items-center w-full">
         <div className="w-full max-w-[400px]">
           <div>
-            <Label htmlFor="name">Title :</Label>
+            <Label htmlFor="title">Title :</Label>
             <Input
-              id="email"
+              id="title"
               value={title}
               className="w-full mt-2"
               onChange={(e) => {
@@ -274,6 +319,33 @@ const ChatClient: React.FC<IChatClient> = ({ chatId }) => {
                 onImageChange={handleImageChange}
                 disabled={isUpdating}
               />
+            </div>
+          </div>
+
+          <h3 className="font-bold text-[18px] mt-10 text-zinc-500">Advisor</h3>
+
+          <div className="flex items-start gap-8 mt-2">
+            <div>
+              <Label htmlFor="name">Name :</Label>
+              <Input
+                id="name"
+                value={advisorName}
+                className="w-full mt-2"
+                onChange={(e) => {
+                  setAdvisorName(e.target.value);
+                }}
+              />
+            </div>
+
+            <div>
+              <Label>Photo :</Label>
+              <div className="flex flex-col w-[96px] h-[96px]">
+                <ImageInput
+                  image={advisorPhoto}
+                  onImageChange={handleAdvisorPhotoChanged}
+                  disabled={isUpdating}
+                />
+              </div>
             </div>
           </div>
 

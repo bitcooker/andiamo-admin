@@ -8,6 +8,8 @@ import ItinerariesPage from "./ItinerariesPage";
 import NeedToKnowPage from "./NeedToKnowPage";
 import { doc, onSnapshot } from "firebase/firestore";
 import { firestore } from "@/firebase";
+import ExploringPage from "./ExploringPage";
+import DiningPage from "./DiningPage";
 
 interface ITripClient {
   tripId: string;
@@ -33,7 +35,7 @@ const TripClient: React.FC<ITripClient> = ({ tripId }) => {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row w-[200px]  md:w-full items-center mx-auto justify-center gap-0">
+      <div className="flex flex-col lg:flex-row w-[200px]  md:w-full items-center mx-auto justify-center gap-0">
         <Button
           onClick={() => {
             handleTabClicked("General");
@@ -49,6 +51,22 @@ const TripClient: React.FC<ITripClient> = ({ tripId }) => {
           variant={`${tab == "Where to Stay" ? "outline" : "ghost"}`}
         >
           Where to stay
+        </Button>
+        <Button
+          onClick={() => {
+            handleTabClicked("Exploring & Adventure");
+          }}
+          variant={`${tab == "Exploring & Adventure" ? "outline" : "ghost"}`}
+        >
+          Exploring & Adventure
+        </Button>
+        <Button
+          onClick={() => {
+            handleTabClicked("Dining & Cuisine");
+          }}
+          variant={`${tab == "Dining & Cuisine" ? "outline" : "ghost"}`}
+        >
+          Dining & Cuisine
         </Button>
         <Button
           onClick={() => {
@@ -71,6 +89,10 @@ const TripClient: React.FC<ITripClient> = ({ tripId }) => {
       <div className="mt-8">
         {tab == "General" && <GeneralPage trip={trip} />}
         {tab == "Where to Stay" && trip && <StayPage trip={trip} />}
+        {tab == "Exploring & Adventure" && trip && (
+          <ExploringPage trip={trip} />
+        )}
+        {tab == "Dining & Cuisine" && trip && <DiningPage trip={trip} />}
         {tab == "Travel Itineraries" && trip && <ItinerariesPage trip={trip} />}
         {tab == "Need to Know" && trip && <NeedToKnowPage trip={trip} />}
       </div>

@@ -6,12 +6,15 @@ import { Input } from "@/components/ui/input";
 import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";
 import { Skeleton } from "@/components/ui/skeleton";
 
-interface IStayImageCard {
-  stayImage: StayImageType;
+interface IImageDescriptionCard {
+  imageDescription: ImageDescriptionType;
   onClick: () => void;
 }
 
-const StayImageCard: React.FC<IStayImageCard> = ({ stayImage, onClick }) => {
+const ImageDescriptionCard: React.FC<IImageDescriptionCard> = ({
+  imageDescription,
+  onClick,
+}) => {
   return (
     <div
       onClick={onClick}
@@ -20,28 +23,31 @@ const StayImageCard: React.FC<IStayImageCard> = ({ stayImage, onClick }) => {
       <Image
         alt="Place Image"
         src={
-          stayImage.imageURL == ""
+          imageDescription.imageURL == ""
             ? "/images/image_placeholder.png"
-            : stayImage.imageURL
+            : imageDescription.imageURL
         }
         width={768}
         height={200}
         className="h-[150px] object-cover aspect-square rounded-lg"
       />
-      <div placeholder="Description" className="absolute bottom-3 left-3">
-        {stayImage.title}
+      <div
+        placeholder="Description"
+        className="absolute bottom-3 left-3 text-white"
+      >
+        {imageDescription.title}
       </div>
     </div>
   );
 };
 
-interface IStayImageCardSkeleton {
+interface IImageDescriptionCardSkeleton {
   opacity: number;
 }
 
-export const StayImageCardSkeleton: React.FC<IStayImageCardSkeleton> = ({
-  opacity,
-}) => {
+export const ImageDescriptionCardSkeleton: React.FC<
+  IImageDescriptionCardSkeleton
+> = ({ opacity }) => {
   const opacities = ["opacity-70", "opacity-50", "opacity-10"];
   return (
     <Skeleton
@@ -50,11 +56,13 @@ export const StayImageCardSkeleton: React.FC<IStayImageCardSkeleton> = ({
   );
 };
 
-interface IAddStayImageCard {
+interface IAddImageDescriptionCard {
   onClick: () => void;
 }
 
-export const AddStayImageCard: React.FC<IAddStayImageCard> = ({ onClick }) => {
+export const AddImageDescriptionCard: React.FC<IAddImageDescriptionCard> = ({
+  onClick,
+}) => {
   return (
     <div
       onClick={onClick}
@@ -68,4 +76,4 @@ export const AddStayImageCard: React.FC<IAddStayImageCard> = ({ onClick }) => {
   );
 };
 
-export default StayImageCard;
+export default ImageDescriptionCard;

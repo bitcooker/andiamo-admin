@@ -7,12 +7,19 @@ import { Timestamp } from "firebase/firestore";
 interface IMessageView {
   message: MessageType;
   photoURL?: string;
+  advisorPhotoURL: string;
 }
 
-const MessageView: React.FC<IMessageView> = ({ message, photoURL }) => {
+const MessageView: React.FC<IMessageView> = ({
+  message,
+  photoURL,
+  advisorPhotoURL,
+}) => {
   const avatarUrl =
     message.role == "admin"
-      ? "/images/user_avatar.jpg"
+      ? advisorPhotoURL.length == 0
+        ? "/images/user_avatar.jpg"
+        : advisorPhotoURL
       : !photoURL || photoURL.length == 0
       ? "/images/user_avatar.jpg"
       : photoURL;

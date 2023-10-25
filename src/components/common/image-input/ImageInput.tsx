@@ -41,7 +41,10 @@ const ImageInput: React.FC<IImageInput> = ({
             onClick={handleButtonClick}
           >
             {image != "" ? (
-              <IoRemoveCircleOutline size={26} />
+              <IoRemoveCircleOutline
+                size={26}
+                className="opacity-20 hover:opacity-100 transition-all"
+              />
             ) : (
               <IoAddCircleOutline size={26} />
             )}
@@ -49,7 +52,7 @@ const ImageInput: React.FC<IImageInput> = ({
         )}
 
         {image != "" && (
-          <div className="flex w-full h-full border rounded-xl">
+          <div className="flex w-full h-full rounded-xl">
             <Image
               alt="Chat Image"
               width={300}

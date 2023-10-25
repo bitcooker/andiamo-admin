@@ -15,7 +15,7 @@ const NeedToKnowCard: React.FC<INeedToKnowCard> = ({ needToKnow, onClick }) => {
       onClick={onClick}
       className="hovers:border-zinc-500 active:scale-95 min-h-[80px] transition-all cursor-pointer relative border p-2 w-full rounded-lg bg-white"
     >
-      {needToKnow.description}
+      {needToKnow.title == "" ? needToKnow.description : needToKnow.title}
     </div>
   );
 };

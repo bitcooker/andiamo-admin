@@ -18,6 +18,8 @@ export declare global {
     title: string;
     image: string;
     userUid: string;
+    advisorName: string;
+    advisorPhoto: string;
     userUnreads: number;
     adminUnreads: number;
     updatedAt: Timestamp;
@@ -56,10 +58,11 @@ export declare global {
     subtitle: string;
     description: string;
     stayDescription: string;
+    exploringDescription: string;
+    diningDescription: string;
     imageURL: string;
   }
-
-  interface StayImageType {
+  interface ImageDescriptionType {
     id: string;
     title: string;
     imageURL: string;
@@ -77,6 +80,7 @@ export declare global {
 
   interface NeedToKnowType {
     id: string;
+    title: string;
     description: string;
   }
 

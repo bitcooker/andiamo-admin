@@ -60,7 +60,7 @@ const TripsClient: React.FC<ITripsClient> = ({}) => {
     setLoading(true);
 
     addDoc(collection(firestore, "trips"), {
-      title: "",
+      title: "Untitled trip",
       subtitle: "",
       description: "",
       stayDescription: "",
