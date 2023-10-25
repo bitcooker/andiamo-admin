@@ -62,7 +62,7 @@ const UserClient: React.FC<IUsersClient> = ({ userId }) => {
           )}
         </div>
       </div>
-      <Tabs defaultValue="account" className="flex-grow w-full mt-5 lg:mt-0">
+      <Tabs defaultValue="basic" className="flex-grow w-full mt-5 lg:mt-0">
         <TabsList className="mx-auto max-w-[450px] h-[60px] p-2 grid grid-cols-4 bg-white/30">
           <TabsTrigger value="basic" className="text-lg">
             Basic
