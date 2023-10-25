@@ -83,6 +83,13 @@ const NeedToKnowPage: React.FC<INeedToKnowPage> = ({ trip }) => {
     }
   }, [currentNeedToKnow]);
 
+  useEffect(() => {
+    if (showModal == false) {
+      setDescription("");
+      setTitle("");
+    }
+  }, [showModal]);
+
   const handleAddNeedToKnowCardClicked = () => {
     setShowModal(true);
     setCurrentNeedToKnow(null);

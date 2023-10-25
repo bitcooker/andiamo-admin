@@ -230,6 +230,7 @@ const ChatClient: React.FC<IChatClient> = ({ chatId }) => {
     // Title Update
     await updateDoc(doc(firestore, "chats", chatId), {
       title: title,
+      advisorName: advisorName,
     });
   };
 
@@ -257,7 +258,13 @@ const ChatClient: React.FC<IChatClient> = ({ chatId }) => {
                           key={index}
                           message={_message}
                           photoURL={user?.photoURL}
+                          advisorName={chat.advisorName}
                           advisorPhotoURL={chat.advisorPhoto}
+                          userName={
+                            user == null
+                              ? "User"
+                              : `${user.firstName} ${user.lastName}`
+                          }
                         />
                       ))}
                     </>

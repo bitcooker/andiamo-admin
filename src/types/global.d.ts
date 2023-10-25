@@ -5,6 +5,10 @@ export declare global {
     email: string;
     name: string;
     photoURL: string;
+    firstName: string;
+    lastName: string;
+    gender: string;
+    experience: string;
   }
 
   interface AdminType {

@@ -27,7 +27,7 @@ const UserCard: React.FC<IUserCard> = ({ user }) => {
         height={96}
         className="w-[96px] h-[96px] aspect-square object-cover rounded-lg mx-auto"
       />
-      <div className="text-sm text-center mt-2">{user.name}</div>
+      <div className="text-sm text-center mt-2">{`${user.firstName} ${user.lastName}`}</div>
     </div>
   );
 };

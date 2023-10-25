@@ -9,6 +9,7 @@ import TripsPage from "./TripsPage";
 import { onSnapshot, doc } from "firebase/firestore";
 import { firestore } from "@/firebase";
 import { Skeleton } from "@/components/ui/skeleton";
+import BasicPage from "./BasicPage";
 
 interface IUsersClient {
   userId: string;
@@ -47,7 +48,7 @@ const UserClient: React.FC<IUsersClient> = ({ userId }) => {
           {user ? (
             <>
               <div className="mt-5 text-center text-lg font-semibold">
-                {user.name}
+                {`${user.firstName} ${user.lastName}`}
               </div>
               <div className="text-center text-xs text-zinc-500 mx-auto lg:max-w-[130px] break-words">
                 {user.email}
@@ -62,7 +63,10 @@ const UserClient: React.FC<IUsersClient> = ({ userId }) => {
         </div>
       </div>
       <Tabs defaultValue="account" className="flex-grow w-full mt-5 lg:mt-0">
-        <TabsList className="mx-auto max-w-[350px] h-[60px] p-2 grid grid-cols-3 bg-white/30">
+        <TabsList className="mx-auto max-w-[450px] h-[60px] p-2 grid grid-cols-4 bg-white/30">
+          <TabsTrigger value="basic" className="text-lg">
+            Basic
+          </TabsTrigger>
           <TabsTrigger value="account" className="text-lg">
             Account
           </TabsTrigger>
@@ -73,6 +77,9 @@ const UserClient: React.FC<IUsersClient> = ({ userId }) => {
             Trips
           </TabsTrigger>
         </TabsList>
+        <TabsContent value="basic" className="mt-6">
+          {user && <BasicPage userId={userId} user={user} />}
+        </TabsContent>
         <TabsContent value="account" className="mt-6">
           {user && <AccountPage userId={userId} user={user} />}
         </TabsContent>

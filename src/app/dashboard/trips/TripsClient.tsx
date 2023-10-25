@@ -64,6 +64,8 @@ const TripsClient: React.FC<ITripsClient> = ({}) => {
       subtitle: "",
       description: "",
       stayDescription: "",
+      exploringDescription: "",
+      diningDescription: "",
       imageURL: "",
       createdAt: serverTimestamp(),
     })

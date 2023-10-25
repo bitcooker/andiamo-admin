@@ -30,7 +30,7 @@ const ChatsPage: React.FC<IChatsPage> = ({ userId, user }) => {
 
   return (
     <div>
-      <h1 className="text-lg font-medium text-zinc-500">{`${user.name}'s Chats`}</h1>
+      <h1 className="text-lg font-medium text-zinc-500">{`${user.firstName}'s Chats`}</h1>
       <hr />
       <div className="flex flex-col gap-3 mt-5">
         {chats ? (

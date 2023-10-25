@@ -8,12 +8,16 @@ interface IMessageView {
   message: MessageType;
   photoURL?: string;
   advisorPhotoURL: string;
+  advisorName: string;
+  userName: string;
 }
 
 const MessageView: React.FC<IMessageView> = ({
   message,
   photoURL,
+  advisorName,
   advisorPhotoURL,
+  userName = "User",
 }) => {
   const avatarUrl =
     message.role == "admin"
@@ -31,12 +35,19 @@ const MessageView: React.FC<IMessageView> = ({
     >
       <Image
         alt="User Avatar"
-        width={35}
-        height={35}
+        width={48}
+        height={48}
         src={avatarUrl}
-        className="w-[35px] h-[35px] rounded-full object-cover aspect-square"
+        className="w-[48px] h-[48px] rounded-full object-cover aspect-square"
       />
       <div>
+        <div
+          className={`text-[16px] font-semibold mb-1 mx-3 ${
+            message.role == "admin" ? "text-end" : "text-start"
+          }`}
+        >
+          {message.role == "admin" ? advisorName : userName}
+        </div>
         <div
           className={`p-3 mx-2 border border-zinc-200 ${
             message.role == "admin" ? "bg-cyan-100/20" : "bg-pink-100/20"

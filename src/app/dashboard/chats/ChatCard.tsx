@@ -49,19 +49,27 @@ const ChatCard: React.FC<IChatCard> = ({ chat }) => {
         <div className="bg-slate-100 h-[1px] -mt-4"></div>
         <div className="flex justify-between items-center">
           {user ? (
-            <Image
-              alt="User Avatar"
-              width={32}
-              height={32}
-              src={
-                user.photoURL.length == 0
-                  ? "/images/user_avatar.jpg"
-                  : user.photoURL
-              }
-              className="rounded-full border object-cover aspect-square"
-            />
+            <div className="flex items-center gap-2">
+              <Image
+                alt="User Avatar"
+                width={32}
+                height={32}
+                src={
+                  user.photoURL.length == 0
+                    ? "/images/user_avatar.jpg"
+                    : user.photoURL
+                }
+                className="rounded-full border object-cover aspect-square"
+              />
+              <div className="text-[14px] text-zinc-500 font-semibold">
+                {`${user.firstName} ${user.lastName}`}
+              </div>
+            </div>
           ) : (
-            <Skeleton className="w-8 h-8 rounded-full" />
+            <div className="flex items-center">
+              <Skeleton className="w-8 h-8 rounded-full" />
+              <Skeleton className="w-[100px] h-[18px] rounded-md" />
+            </div>
           )}
 
           <div className="flex items-start gap-2">
